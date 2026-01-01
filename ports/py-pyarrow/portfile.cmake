@@ -10,10 +10,11 @@ set(ENV{ArrowCompute_DIR} "${CURRENT_INSTALLED_DIR}/share/arrowcompute")
 set(ENV{Parquet_DIR} "${CURRENT_INSTALLED_DIR}/share/parquet")
 set(ENV{ArrowDataset_DIR} "${CURRENT_INSTALLED_DIR}/share/arrowdataset")
 set(ENV{ArrowAcero_DIR} "${CURRENT_INSTALLED_DIR}/share/arrowacero")
+set(ENV{PYARROW_BUILD_TYPE} "relwithdebinfo")
 vcpkg_python_build_and_install_wheel(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
-        --config-json "{\"setup-args\" : [\"-DWITH_COMPUTE=ON\", \"-DCMAKE_BUILD_TYPE=RelWithDebInfo\" ] }"
+        --config-json "{\"setup-args\" : [\"-DWITH_COMPUTE=ON\" ] }"
       )
 
 # license is the same as dependency `arrow` -- but the pyarrow codebase
