@@ -4,6 +4,7 @@
   "description": "Extract semantic information about static Python code.",
   "homepage": "https://github.com/serge-sans-paille/beniget",
   "dependencies": [
+    "py-gast",
     "python3",
     {
       "name": "python3",
