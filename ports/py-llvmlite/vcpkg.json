@@ -1,0 +1,29 @@
+{
+  "name": "py-llvmlite",
+  "version": "0.46.0",
+  "description": "lightweight wrapper around basic LLVM functionality",
+  "homepage": "http://pythonhosted.org/llvmlite",
+  "dependencies": [
+    {
+      "name": "py-cython",
+      "host": true
+    },
+    {
+      "name": "py-setuptools",
+      "host": true
+    },
+    {
+      "name": "py-versioneer",
+      "host": true
+    },
+    "python3",
+    {
+      "name": "python3",
+      "host": true
+    },
+    {
+      "name": "vcpkg-python-scripts",
+      "host": true
+    }
+  ]
+}

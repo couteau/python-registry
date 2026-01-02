@@ -28,6 +28,7 @@ jobs:
       buildtrees: /Users/runner/vcpkg-build
       FC: gfortran
       GCC_VERSION: 15
+      LLVM_DIR: LLVM_DIR=$HOMEBREW_PREFIX/opt/llvm@20/lib/cmake/llvm
 
     name: build (macos)
     runs-on: ${{ matrix.os }}
@@ -41,7 +42,7 @@ jobs:
 
       - name: 🔨 Prepare build env
         run: |
-          brew install autoconf automake autoconf-archive libtool mono swig bison flex
+          brew install autoconf automake autoconf-archive libtool mono swig bison flex llvm@20
 
       - name: Symlink gfortran (macOS)
         if: matrix.os == 'macos-15'
