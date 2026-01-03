@@ -135,6 +135,8 @@ jobs:
           ./vcpkg/vcpkg install $VCPKG_OPTIONS py-pandas
           ./vcpkg/vcpkg install $VCPKG_OPTIONS py-pyogrio
           ./vcpkg/vcpkg install $VCPKG_OPTIONS py-geopandas
+          ./vcpkg/vcpkg install $VCPKG_OPTIONS py-llvmlite
+          ./vcpkg/vcpkg install $VCPKG_OPTIONS py-numba
 
           # ./vcpkg/vcpkg install $VCPKG_OPTIONS py-pyqt6
 
