@@ -42,7 +42,6 @@ jobs:
       - name: 🔨 Prepare build env
         run: |
           brew install autoconf automake autoconf-archive libtool mono swig bison flex llvm@20
-          export LLVM_DIR="$(brew --prefix llvm@20)/lib/cmake/llvm"
 
       - name: Symlink gfortran (macOS)
         if: matrix.os == 'macos-15'
@@ -91,7 +90,7 @@ jobs:
       - name: 🌋 Build
         run: |
           VCPKG_OPTIONS="--overlay-ports="${{ github.workspace }}/ports" --host-triplet=${{ matrix.triplet }} --triplet=${{ matrix.triplet }}  --x-buildtrees-root=${{ env.buildtrees }} --recurse"
-          echo LLVM_DIR=$LLVM_DIR
+          export CMAKE_PREFIX_PATH="$(brew --prefix llvm@20)"
           ./vcpkg/vcpkg install $VCPKG_OPTIONS py-llvmlite
           ./vcpkg/vcpkg install $VCPKG_OPTIONS py-numba
 
