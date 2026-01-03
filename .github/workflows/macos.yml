@@ -28,7 +28,7 @@ jobs:
       buildtrees: /Users/runner/vcpkg-build
       FC: gfortran
       GCC_VERSION: 15
-      LLVM_DIR: LLVM_DIR=$HOMEBREW_PREFIX/opt/llvm@20/lib/cmake/llvm
+      LLVM_DIR: $HOMEBREW_PREFIX/opt/llvm@20/lib/cmake/llvm
 
     name: build (macos)
     runs-on: ${{ matrix.os }}
