@@ -43,7 +43,7 @@ jobs:
         run: |
           brew install autoconf automake autoconf-archive libtool mono swig bison flex llvm@20
           export LLVM_DIR="/usr/local/opt/llvm@20/lib/cmake/llvm"
-          dir $LLVM_DIR
+          ls $LLVM_DIR
 
       - name: Symlink gfortran (macOS)
         if: matrix.os == 'macos-15'
