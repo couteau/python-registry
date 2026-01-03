@@ -42,10 +42,8 @@ jobs:
       - name: 🔨 Prepare build env
         run: |
           brew install autoconf automake autoconf-archive libtool mono swig bison flex llvm@20
-          echo $HOMEBREW_PREFIX
-          echo $HOMEBREW_REPOSITORY
-          export LLVM_DIR=$HOMEBREW_PREFIX/opt/llvm@20/lib/cmake/llvm
-          echo $LLVM_DIR
+          env
+          export LLVM_DIR=/opt/homebrew/opt/llvm@20/lib/cmake/llvm
           ls $LLVM_DIR/
 
       - name: Symlink gfortran (macOS)
