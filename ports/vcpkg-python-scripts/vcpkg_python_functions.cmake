@@ -186,7 +186,7 @@ function(vcpkg_python_test_import)
   if(VCPKG_TARGET_IS_OSX)
     set(ENV{DYLD_LIBRARY_PATH} "${CURRENT_PACKAGES_DIR}/lib")
   elseif(VCPKG_TARGET_IS_LINUX)
-    set(ENV{LD_LIBRARY_PATH} "${CURRENT_PACKAGES_DIR}/lib")
+	  set(ENV{LD_LIBRARY_PATH} "${CURRENT_PACKAGES_DIR}/lib:${CURRENT_INSTALLED_DIR}/lib")
   endif()
 
   vcpkg_execute_required_process(COMMAND "${z_vcpkg_python_func_python}" "${CURRENT_BUILDTREES_DIR}/import_test.py"
