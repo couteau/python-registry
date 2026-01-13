@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO mesonbuild/meson-python
     REF ${VERSION}
-    SHA512 f1fce89bb0a3d279b9900c4ecec78e5f24da92d72f64ebf6c27648b4201a75a65204c3fac08aaa3e8d70dbeef245c3235e39994c7c0b9cba27c0df528211c7f7
+    SHA512 f32f02851cdfc13f29550b297b3bce9038bdaf02381b15064e36442104e93624e090abeae23b9de97dfa971aa456716cae65dbe04784beee13b510db12de1000
     HEAD_REF main
 )
 
