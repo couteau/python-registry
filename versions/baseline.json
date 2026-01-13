@@ -221,7 +221,7 @@
       "port-version": 0
     },
     "py-packaging": {
-      "baseline": "24.2",
+      "baseline": "25.0",
       "port-version": 0
     },
     "py-pandas": {
