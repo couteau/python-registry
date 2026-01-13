@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO FFY00/python-pyproject-metadata
+    REPO pypa/pyproject-metadata
     REF ${VERSION}
-    SHA512 8d8c7839a318acce64b0cf15b3adbc49c2f309b453135b55f2d7942967ba8bbd4f85696d0f3c651e1246c50e33657e6108f0f05ac20b4a9162cdb2875269c548
+    SHA512 85b4104cf28610bb7771dc69a1c024bffb3cb51f430aaae0e342af87559c8af9df9fddbf9381c4edeebf396ba1b96582826c6a3a745edb278845949d77375370
     HEAD_REF main
 )
 

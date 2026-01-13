@@ -297,7 +297,7 @@
       "port-version": 0
     },
     "py-pyproject-metadata": {
-      "baseline": "0.8.0",
+      "baseline": "0.10.0",
       "port-version": 0
     },
     "py-pyqt-builder": {
