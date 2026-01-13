@@ -10,6 +10,9 @@ find_program(VCPKG_CYTHON NAMES cython PATHS "${VCPKG_PYTHON3_BASEDIR}" "${VCPKG
 
 set(ENV{PYTHON3} "${VCPKG_PYTHON3}")
 set(PYTHON3 "${VCPKG_PYTHON3}")
+# not sure why, but for some reason, this gets reset, and 
+# vcpkg_python_build_and_install_wheel attempts to use the system python
+set(z_vcpkg_python_func_python ${PYTHON3})
 
 vcpkg_add_to_path(PREPEND "${VCPKG_PYTHON3_BASEDIR}")
 if(VCPKG_TARGET_IS_WINDOWS)
@@ -29,38 +32,66 @@ vcpkg_from_github(
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH_SIMD
     REPO intel/x86-simd-sort
-    REF 0631a88763a4a0a4c9e84d5eeb0ec5d36053730b
-    SHA512 cd44796fc10e13004932be05d5bee46070e061bcc429c7ee8d9e11520e18c45bdec2f4fcd3555d9769891a763e151b0a0a4c00385ea30f24c99da1c65d736e39
+    REF 8a7208187d99f0cb67e38c57ab1c7c85aad07aca
+    SHA512 4cf2462890306fbd744b3bf40aada62d13743fafe113f469bd6816a48234a83ed552ec4f2924668a94e468c7629e91f8dc6d54368a669db02f48fa872d6ad9e0
     HEAD_REF main
 )
 
-file(COPY "${SOURCE_PATH_SIMD}/" DESTINATION "${SOURCE_PATH}/numpy/core/src/npysort/x86-simd-sort")
+file(COPY "${SOURCE_PATH_SIMD}/" DESTINATION "${SOURCE_PATH}/numpy/_core/src/npysort/x86-simd-sort")
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH_MESON_NUMPY
     REPO numpy/meson
-    REF 4e370ca8ab73c07f7b84abe8a4b937caace050a4
-    SHA512 dec6e3b9428f95790f85a863778227a73e4f432f8f54e87d61fd6499b5a0723c59a334fcaf880afd59ae50c924d8f2cfa340a143f752cb39f976c731ca0ea123
-    HEAD_REF main
+    REF 5d5a3d478da115c812be77afa651db2492d52171
+    SHA512 7045d09b123fac0d305071283357e2ee66c6cd2b0459f62b7a27194c68bfc734bf2675ba49ca48fcc738e160dfea9b648e70bd9361afe42a8722c3dfd2f4fd3d
+    HEAD_REF main-numpymeson
 )
 
 file(COPY "${SOURCE_PATH_MESON_NUMPY}/mesonbuild/modules/features" DESTINATION "${MESON_DIR}/mesonbuild/modules")
+#file(COPY "${SOURCE_PATH_MESON_NUMPY}/" DESTINATION "${SOURCE_PATH}/vendored-meson/meson")
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH_SVML
     REPO numpy/SVML
-    REF 1b21e453f6b1ba6a6aca392b1d810d9d41576123
-    SHA512 c9ea7bf9effbf5750750ddfdfc7db3d95614ed176bd4540d68eddb90a15f819510e9564c9454ef34be02dd6a8e48a7f292a70cb5b63c25c3d1c450a8e3b77d35
+    REF 3a713b13018325451c1b939d3914ceff5ec68e19
+    SHA512 aa2d1f83a7fdc1c5b31f51c4d8d3ffd2604be68011584ec30e1e18522f9b36c39d613e9e9e4e1b100548b5db42f3cb60d95d042f3d523802103de90f617a8b66
     HEAD_REF main
 )
 
-file(COPY "${SOURCE_PATH_SVML}/" DESTINATION "${SOURCE_PATH}/numpy/core/src/umath/svml")
+file(COPY "${SOURCE_PATH_SVML}/" DESTINATION "${SOURCE_PATH}/numpy/_core/src/umath/svml")
+
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH_HIGHWAY
+    REPO google/highway
+    REF ac0d5d297b13ab1b89f48484fc7911082d76a93f
+    SHA512 0736644d3a674d85852980a26f3fa1431522e082f3e1834ab71a9169093c9ff3ab10f030b8139708db4261de81e8725c9554112942468f8f378da29b7506324f
+    HEAD_REF master
+)
+
+file(COPY "${SOURCE_PATH_HIGHWAY}/" DESTINATION "${SOURCE_PATH}/numpy/_core/src/highway")
+
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH_CAPICOMPAT
+    REPO python/pythoncapi-compat
+    REF 11cb80f2652cb2fe5231bf60b9dd98c83a4e25f4
+    SHA512 0d3ca2ada19e0a42570846b1f6f5938e37873d6fd6fc36cce896fd9384a6569580250959b4357d008b06b9dcddf26a2af051dd01fda16f7651889f4a658d0638
+    HEAD_REF main
+)
+
+file(COPY "${SOURCE_PATH_CAPICOMPAT}/" DESTINATION "${SOURCE_PATH}/numpy/_core/src/common/pythoncapi-compat")
+
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH_POCKETFFT
+    REPO mreineck/pocketfft
+    REF d746b2bb5368e0aa6b75de1d83dc7aae46e7da80
+    SHA512 a6a520d61f050ef16d3e87e64362448c315bbc6d8ae6060b570ebdbb7f38435a43fbac5c5cba3035c1402526a2be39184f52bfae79fc74b03df595cdc8bf8105
+    HEAD_REF cpp
+)
+
+file(COPY "${SOURCE_PATH_POCKETFFT}/" DESTINATION "${SOURCE_PATH}/numpy/fft/pocketfft")
 
 vcpkg_replace_string("${SOURCE_PATH}/meson.build" "py.dependency()" "dependency('python-3.${PYTHON3_VERSION_MINOR}', method : 'pkg-config')")
 
-#debug replacement 
-vcpkg_replace_string("${SOURCE_PATH}/numpy/_build_utils/tempita.py" "import argparse" "import argparse\nprint(sys.executable)\nimport os\n
-print(os.environ['PATH'])")
 
 if(VCPKG_TARGET_IS_WINDOWS AND VCPKG_CROSSCOMPILING AND VCPKG_TARGET_ARCHITECTURE MATCHES "arm")
   set(opts 
@@ -69,24 +100,20 @@ if(VCPKG_TARGET_IS_WINDOWS AND VCPKG_CROSSCOMPILING AND VCPKG_TARGET_ARCHITECTUR
   )
 endif()
 
-message(STATUS "PATH is: '$ENV{PATH}'")
-vcpkg_configure_meson(
+vcpkg_mesonpy_prepare_build_options(OUTPUT meson_opts)
+
+z_vcpkg_setup_pkgconfig_path(CONFIG "RELEASE")
+
+list(APPEND meson_opts  "--python.platlibdir" "${CURRENT_INSTALLED_DIR}/lib")
+list(JOIN meson_opts "\",\""  meson_opts)
+
+vcpkg_python_build_and_install_wheel(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS 
-        -Dblas=blas
-        -Dlapack=lapack
-        #-Duse-ilp64=true
-    ADDITIONAL_BINARIES
-      cython=['${VCPKG_CYTHON}']
-      python3=['${VCPKG_PYTHON3}']
-#      python=['${VCPKG_PYTHON3}']
-    ${opts}
-    )
-message(STATUS "PATH is: '$ENV{PATH}'")
-vcpkg_install_meson()
-message(STATUS "PATH is: '$ENV{PATH}'")
-vcpkg_fixup_pkgconfig()
-
+    --config-json "{\"setup-args\" : [\"${meson_opts}\" ] }" 
+)
+vcpkg_fixup_pkgconfig(SKIP_CHECK)
+vcpkg_copy_tools(TOOL_NAMES f2py numpy-config DESTINATION "${CURRENT_PACKAGES_DIR}/tools/python3" AUTO_CLEAN)
 #E:\vcpkg_folders\numpy\packages\numpy_arm64-windows-release\tools\python3\Lib\site-packages\numpy\__config__.py
 # "path": r"E:/vcpkg_folders/numpy/installed/x64-windows-release/tools/python3/python.exe", and full paths to compilers
 #"commands": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/bin/Hostx64/arm64/cl.exe, -DWIN32, -D_WINDOWS, -W3, -utf-8, -MP, -MD, -O2, -Oi, -Gy, -DNDEBUG, -Z7",
