@@ -1,6 +1,7 @@
 {
   "name": "py-pydantic",
   "version": "2.12.5",
+  "port-version": 1,
   "description": "Data validation using Python type hints.",
   "homepage": "https://github.com/pydantic/pydantic",
   "dependencies": [
@@ -12,6 +13,7 @@
       "name": "py-hatchling",
       "host": true
     },
+    "py-pydantic-core",
     "python3",
     {
       "name": "vcpkg-python-scripts",
