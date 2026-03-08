@@ -10,6 +10,9 @@ find_program(VCPKG_CYTHON NAMES cython PATHS "${VCPKG_PYTHON3_BASEDIR}" "${VCPKG
 
 set(ENV{PYTHON3} "${VCPKG_PYTHON3}")
 set(PYTHON3 "${VCPKG_PYTHON3}")
+# not sure why, but for some reason, this gets reset, and 
+# vcpkg_python_build_and_install_wheel attempts to use the system python
+set(z_vcpkg_python_func_python ${PYTHON3})
 
 vcpkg_add_to_path(PREPEND "${VCPKG_PYTHON3_BASEDIR}")
 if(VCPKG_TARGET_IS_WINDOWS)
@@ -22,45 +25,73 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO numpy/numpy
     REF v${VERSION}
-    SHA512 01b6a124c72d082f1dafdd98cdaaa84ab57f2bf0112d89d9355fa458a04deb8309c7e78449767429049971793c040e51412060681218a51c671ac6086dba2fa4
+    SHA512 33f39b7acf79a3e0e697736ccb330b4d7d3868aff8224d633e4e2ebd02f13d3986cf868fb2f860dcf7c1011992a65d839441c5f0251108ae1d70467fa3711de0
     HEAD_REF main
 )
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH_SIMD
     REPO intel/x86-simd-sort
-    REF 0631a88763a4a0a4c9e84d5eeb0ec5d36053730b
-    SHA512 cd44796fc10e13004932be05d5bee46070e061bcc429c7ee8d9e11520e18c45bdec2f4fcd3555d9769891a763e151b0a0a4c00385ea30f24c99da1c65d736e39
+    REF 6a7a01da4b0dfde108aa626a2364c954e2c50fe1 
+    SHA512 22e398b88fa998d3451d82345c45bb3be345c7fe9e3434788eb7e8f6cb54b561b7dc79d5f3c6d28b426a87a0966ca06f8591748f90ccae7993f853e05d63e469
     HEAD_REF main
 )
 
-file(COPY "${SOURCE_PATH_SIMD}/" DESTINATION "${SOURCE_PATH}/numpy/core/src/npysort/x86-simd-sort")
+file(COPY "${SOURCE_PATH_SIMD}/" DESTINATION "${SOURCE_PATH}/numpy/_core/src/npysort/x86-simd-sort")
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH_MESON_NUMPY
     REPO numpy/meson
-    REF 4e370ca8ab73c07f7b84abe8a4b937caace050a4
-    SHA512 dec6e3b9428f95790f85a863778227a73e4f432f8f54e87d61fd6499b5a0723c59a334fcaf880afd59ae50c924d8f2cfa340a143f752cb39f976c731ca0ea123
-    HEAD_REF main
+    REF 5d5a3d478da115c812be77afa651db2492d52171
+    SHA512 7045d09b123fac0d305071283357e2ee66c6cd2b0459f62b7a27194c68bfc734bf2675ba49ca48fcc738e160dfea9b648e70bd9361afe42a8722c3dfd2f4fd3d
+    HEAD_REF main-numpymeson
 )
 
 file(COPY "${SOURCE_PATH_MESON_NUMPY}/mesonbuild/modules/features" DESTINATION "${MESON_DIR}/mesonbuild/modules")
+#file(COPY "${SOURCE_PATH_MESON_NUMPY}/" DESTINATION "${SOURCE_PATH}/vendored-meson/meson")
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH_SVML
     REPO numpy/SVML
-    REF 1b21e453f6b1ba6a6aca392b1d810d9d41576123
-    SHA512 c9ea7bf9effbf5750750ddfdfc7db3d95614ed176bd4540d68eddb90a15f819510e9564c9454ef34be02dd6a8e48a7f292a70cb5b63c25c3d1c450a8e3b77d35
+    REF 3a713b13018325451c1b939d3914ceff5ec68e19
+    SHA512 aa2d1f83a7fdc1c5b31f51c4d8d3ffd2604be68011584ec30e1e18522f9b36c39d613e9e9e4e1b100548b5db42f3cb60d95d042f3d523802103de90f617a8b66
     HEAD_REF main
 )
 
-file(COPY "${SOURCE_PATH_SVML}/" DESTINATION "${SOURCE_PATH}/numpy/core/src/umath/svml")
+file(COPY "${SOURCE_PATH_SVML}/" DESTINATION "${SOURCE_PATH}/numpy/_core/src/umath/svml")
+
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH_HIGHWAY
+    REPO google/highway
+    REF ee36c837129310be19c17c9108c6dc3f6ae06942
+    SHA512 8c2a34a329e9b4c239ded17f906756e79cfc6afd47711ce17eaf7ffab74ae8c7f60bd64b81cfa5eaa2338779998373e1a2c5cb4c97c7a2e8ca7b0514622e8bdb
+    HEAD_REF master
+)
+
+file(COPY "${SOURCE_PATH_HIGHWAY}/" DESTINATION "${SOURCE_PATH}/numpy/_core/src/highway")
+
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH_CAPICOMPAT
+    REPO python/pythoncapi-compat
+    REF 90c06a4cae557bdbfa4f231a781d2b5c1a8f6d1c
+    SHA512 a6540a70337f994254930c310f80497b75c76315ed9b7e478247ce4b52ff615bba28f7b0bcef82e16f99b7b8baee030eb69184d8ad7b563e059988bcff58aed5
+    HEAD_REF main
+)
+
+file(COPY "${SOURCE_PATH_CAPICOMPAT}/" DESTINATION "${SOURCE_PATH}/numpy/_core/src/common/pythoncapi-compat")
+
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH_POCKETFFT
+    REPO mreineck/pocketfft
+    REF 33ae5dc94c9cdc7f1c78346504a85de87cadaa12
+    SHA512 2acd1b2c4419a2a817e5fdc7770e8f9dae991a7b45c115651eb4df489f28b7ae8d088806bc100434bb9a6c77c02018c3ee14315c3c02c0dc433f18d8fbf064ad
+    HEAD_REF cpp
+)
+
+file(COPY "${SOURCE_PATH_POCKETFFT}/" DESTINATION "${SOURCE_PATH}/numpy/fft/pocketfft")
 
 vcpkg_replace_string("${SOURCE_PATH}/meson.build" "py.dependency()" "dependency('python-3.${PYTHON3_VERSION_MINOR}', method : 'pkg-config')")
 
-#debug replacement 
-vcpkg_replace_string("${SOURCE_PATH}/numpy/_build_utils/tempita.py" "import argparse" "import argparse\nprint(sys.executable)\nimport os\n
-print(os.environ['PATH'])")
 
 if(VCPKG_TARGET_IS_WINDOWS AND VCPKG_CROSSCOMPILING AND VCPKG_TARGET_ARCHITECTURE MATCHES "arm")
   set(opts 
@@ -69,24 +100,24 @@ if(VCPKG_TARGET_IS_WINDOWS AND VCPKG_CROSSCOMPILING AND VCPKG_TARGET_ARCHITECTUR
   )
 endif()
 
-message(STATUS "PATH is: '$ENV{PATH}'")
-vcpkg_configure_meson(
+vcpkg_mesonpy_prepare_build_options(OUTPUT meson_opts)
+
+z_vcpkg_setup_pkgconfig_path(CONFIG "RELEASE")
+
+list(APPEND meson_opts  "--python.platlibdir" "${CURRENT_INSTALLED_DIR}/lib")
+list(JOIN meson_opts "\",\""  meson_opts)
+
+if (VCPKG_TARGET_IS_WINDOWS)
+    set(ENV{CFLAGS} "-fleading-underscore")
+endif()
+
+vcpkg_python_build_and_install_wheel(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS 
-        -Dblas=blas
-        -Dlapack=lapack
-        #-Duse-ilp64=true
-    ADDITIONAL_BINARIES
-      cython=['${VCPKG_CYTHON}']
-      python3=['${VCPKG_PYTHON3}']
-#      python=['${VCPKG_PYTHON3}']
-    ${opts}
-    )
-message(STATUS "PATH is: '$ENV{PATH}'")
-vcpkg_install_meson()
-message(STATUS "PATH is: '$ENV{PATH}'")
-vcpkg_fixup_pkgconfig()
-
+    --config-json "{\"setup-args\" : [\"${meson_opts}\" ] }" 
+)
+vcpkg_fixup_pkgconfig(SKIP_CHECK)
+vcpkg_copy_tools(TOOL_NAMES f2py numpy-config DESTINATION "${CURRENT_PACKAGES_DIR}/tools/python3" AUTO_CLEAN)
 #E:\vcpkg_folders\numpy\packages\numpy_arm64-windows-release\tools\python3\Lib\site-packages\numpy\__config__.py
 # "path": r"E:/vcpkg_folders/numpy/installed/x64-windows-release/tools/python3/python.exe", and full paths to compilers
 #"commands": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/bin/Hostx64/arm64/cl.exe, -DWIN32, -D_WINDOWS, -W3, -utf-8, -MP, -MD, -O2, -Oi, -Gy, -DNDEBUG, -Z7",

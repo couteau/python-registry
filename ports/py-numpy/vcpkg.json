@@ -1,6 +1,6 @@
 {
   "name": "py-numpy",
-  "version": "1.26.4",
+  "version": "2.4.2",
   "description": "The fundamental package for scientific computing with Python.",
   "homepage": "https://www.numpy.org/",
   "license": "BSD-3-Clause",
@@ -9,6 +9,14 @@
     "lapack",
     {
       "name": "py-cython",
+      "host": true
+    },
+    {
+      "name": "py-gpep517",
+      "host": true
+    },
+    {
+      "name": "py-meson",
       "host": true
     },
     "python3",

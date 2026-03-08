@@ -25,7 +25,6 @@ jobs:
             triplet: arm64-osx-dynamic
     env:
       buildtrees: /Users/runner/vcpkg-build
-      FC: gfortran
       GCC_VERSION: 15
 
     name: build (macos)
@@ -43,21 +42,11 @@ jobs:
           brew install autoconf automake autoconf-archive libtool mono swig bison flex llvm@20
           echo "HOMEBREW_PREFIX=$(brew --prefix)" >> $GITHUB_ENV
 
-      - name: Symlink gfortran
-        run: |
-          # make sure gfortran is available
-          # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md
-          # https://github.com/actions/runner-images/issues/3371
-          # ln version - new path 'MacOS14'
-          sudo ln -fs $HOMEBREW_PREFIX/bin/gfortran-${GCC_VERSION} /usr/local/bin/gfortran
-          sudo mkdir -p /usr/local/gfortran
-          sudo ln -sf $HOMEBREW_PREFIX/Cellar/gcc@${GCC_VERSION}/*/lib/gcc/${GCC_VERSION} /usr/local/gfortran/lib
-
       - name: 🐕 Checkout vcpkg
         uses: actions/checkout@v4
         with:
           repository: microsoft/vcpkg
-          ref: 7c175421efa71616f86f7f02e053371a67e31bb2 # TODO: can we have a canonical baseline for tests?
+          ref: 5d57f5a0a5469a23e005fc79a7c1814ab4fc967e # TODO: can we have a canonical baseline for tests?
           path: vcpkg
           fetch-depth: 1
 
