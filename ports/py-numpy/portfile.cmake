@@ -107,6 +107,10 @@ z_vcpkg_setup_pkgconfig_path(CONFIG "RELEASE")
 list(APPEND meson_opts  "--python.platlibdir" "${CURRENT_INSTALLED_DIR}/lib")
 list(JOIN meson_opts "\",\""  meson_opts)
 
+if (VCPKG_TARGET_IS_WINDOWS)
+    set(ENV{CFLAGS} "-fleading-underscore")
+endif()
+
 vcpkg_python_build_and_install_wheel(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS 
