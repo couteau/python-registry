@@ -5,8 +5,14 @@
   "homepage": "https://www.numpy.org/",
   "license": "BSD-3-Clause",
   "dependencies": [
-    "blas",
-    "lapack",
+    {
+      "name": "blas",
+      "platform": "!osx"
+    },
+    {
+      "name": "lapack",
+      "platform": "!osx"
+    },
     {
       "name": "py-cython",
       "host": true

@@ -102,6 +102,21 @@ endif()
 
 vcpkg_mesonpy_prepare_build_options(OUTPUT meson_opts)
 
+if (VCPKG_TARGET_IS_OSX)
+    list(APPEND meson_opts
+        "-Dblas=accelerate"
+        "-Dlapack=accelerate"
+    )
+else()
+    # unless we set this explicitly, windows will use OpenBLAS if it is installed
+    # (e.g., by another package) and that will cause a build failure due to 
+    # incompatible name mangling
+    list(APPEND meson_opts
+        "-Dblas=blas"
+        "-Dlapack=lapack"
+    )
+endif()
+
 z_vcpkg_setup_pkgconfig_path(CONFIG "RELEASE")
 
 list(APPEND meson_opts  "--python.platlibdir" "${CURRENT_INSTALLED_DIR}/lib")
@@ -113,10 +128,9 @@ vcpkg_python_build_and_install_wheel(
     --config-json "{\"setup-args\" : [\"${meson_opts}\" ] }" 
 )
 vcpkg_fixup_pkgconfig(SKIP_CHECK)
-vcpkg_copy_tools(TOOL_NAMES f2py numpy-config DESTINATION "${CURRENT_PACKAGES_DIR}/tools/python3" AUTO_CLEAN)
-#E:\vcpkg_folders\numpy\packages\numpy_arm64-windows-release\tools\python3\Lib\site-packages\numpy\__config__.py
-# "path": r"E:/vcpkg_folders/numpy/installed/x64-windows-release/tools/python3/python.exe", and full paths to compilers
-#"commands": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/bin/Hostx64/arm64/cl.exe, -DWIN32, -D_WINDOWS, -W3, -utf-8, -MP, -MD, -O2, -Oi, -Gy, -DNDEBUG, -Z7",
+if(NOT VCPKG_TARGET_IS_WINDOWS)
+    vcpkg_copy_tools(TOOL_NAMES f2py numpy-config DESTINATION "${CURRENT_PACKAGES_DIR}/tools/python3" AUTO_CLEAN)
+endif()
 
 set(subdir "${CURRENT_PACKAGES_DIR}/${PYTHON3_SITE}/")
 if(VCPKG_TARGET_IS_WINDOWS)
