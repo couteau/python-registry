@@ -60,7 +60,10 @@ jobs:
         run: |
           VCPKG_OPTIONS="--overlay-ports=${{ github.workspace }}/ports --triplet=${{ matrix.triplet }} --x-buildtrees-root=C:/vcpkg-build"
           ./vcpkg/vcpkg.exe install $VCPKG_OPTIONS py-pip-system-certs
+          ./vcpkg/vcpkg.exe install $VCPKG_OPTIONS py-numpy
+          cat D:/a/python-registry/python-registry/vcpkg/packages/py-numpy_x64-windows/tools/python3/Lib/site-packages/numpy/__config__.py
           ./vcpkg/vcpkg.exe install $VCPKG_OPTIONS py-scipy
+          cat D:/a/python-registry/python-registry/vcpkg/packages/py-scipy_x64-windows/tools/python3/Lib/site-packages/scipy/__config__.py
 
       - name: 📑 Upload logs
         uses: actions/upload-artifact@v7
