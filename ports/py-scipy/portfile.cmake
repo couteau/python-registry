@@ -56,7 +56,7 @@ else()
   )
 endif()
 
-if (VCPKG_TARGET_IS_WINDOWS AND CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+if (VCPKG_TARGET_IS_WINDOWS)
   list(APPEND meson_opts
     "-Duse-pythran=false"
   )

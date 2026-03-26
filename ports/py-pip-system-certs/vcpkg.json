@@ -5,6 +5,7 @@
   "description": "Live patches pip to use system certs by default",
   "homepage": "https://gitlab.com/alelec/pip-system-certs",
   "dependencies": [
+    "py-pip",
     {
       "name": "py-setuptools",
       "host": true

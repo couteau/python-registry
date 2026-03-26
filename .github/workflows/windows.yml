@@ -59,6 +59,7 @@ jobs:
         shell: bash
         run: |
           VCPKG_OPTIONS="--overlay-ports=${{ github.workspace }}/ports --triplet=${{ matrix.triplet }} --x-buildtrees-root=C:/vcpkg-build"
+          ./vcpkg/vcpkg.exe install $VCPKG_OPTIONS py-pip-system-certs
           ./vcpkg/vcpkg.exe install $VCPKG_OPTIONS py-scipy
 
       - name: 📑 Upload logs
