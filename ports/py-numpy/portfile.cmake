@@ -146,13 +146,25 @@ file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/${PYTHON3_SITE}/numpy/_core/lib/pkg
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/lib/site-packages/numpy/_core/lib/pkgconfig")
 vcpkg_fixup_pkgconfig()
 
+message(STATUS "CURRENT_INSTALLED_DIR=${CURRENT_INSTALLED_DIR}")
+message(STATUS "PYTHON3=${VCPKG_PYTHON3}")
 set(subdir "${CURRENT_PACKAGES_DIR}/${PYTHON3_SITE}/")
 set(pyfile "${subdir}/numpy/__config__.py")
 file(READ "${pyfile}" contents)
+message(STATUS "Before config fixup:")
+message(STATUS ${contents})
+if (VCPKG_TARGET_IS_WINDOWS)
+  string(REPLACE "/" "\\" python_executable ${VCPKG_PYTHON3})
+else()
+  set(python_executable ${VCPKG_PYTHON3})
+endif()
 string(REPLACE "from enum import Enum" "from enum import Enum\nimport sys" contents "${contents}")
+string(REPLACE "r\"${python_executable}\"" "sys.executable" contents "${contents}")
 string(REPLACE "${CURRENT_INSTALLED_DIR}" "$(prefix)" contents "${contents}")
-string(REPLACE "r\"${VCPKG_PYTHON3}\"" "sys.executable" contents "${contents}")
+string(REGEX REPLACE "\"commands\": +r\"[A-Za-z0-9_ .:\\/-]+[/\\]([A-Za-z0-9_-]+)${VCPKG_HOST_EXECUTABLE_SUFFIX}\"" "\"commands\": r\"\\1${VCPKG_HOST_EXECUTABLE_SUFFIX}\"" contents "${contents}")
 file(WRITE "${pyfile}" "${contents}")
+message(STATUS "After config fixup:")
+message(STATUS ${contents})
 
 file(REMOVE_RECURSE
     "${CURRENT_PACKAGES_DIR}/debug/include"
