@@ -156,7 +156,12 @@ if("python" IN_LIST FEATURES)
     # use the vcpkg-installed python so we create the wheel for the correct version
     message(STATUS "Building pyarrow")
     
-    set(PYTHON3 "${CURRENT_HOST_INSTALLED_DIR}/tools/python3/python3${VCPKG_HOST_EXECUTABLE_SUFFIX}")
+    if (VCPKG_TARGET_IS_WINDOWS)
+        set(PYTHON3 "${CURRENT_HOST_INSTALLED_DIR}/tools/python3/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
+    else()
+        set(PYTHON3 "${CURRENT_HOST_INSTALLED_DIR}/tools/python3/python3${VCPKG_HOST_EXECUTABLE_SUFFIX}")
+    endif()
+    
     if(NOT EXISTS "${PYTHON3}")
         vcpkg_find_acquire_program(PYTHON3)
     endif()
