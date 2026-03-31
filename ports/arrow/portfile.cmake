@@ -199,10 +199,10 @@ if("python" IN_LIST FEATURES)
     else()
         set(build_opts "--build-type=release")
     endif()
-    
+
     vcpkg_execute_required_process(
         COMMAND "${PYTHON3_VENV}" "setup.py"  
-        "build_ext" "${build_opts}" --rpath "@loader_path/../../../"
+        "build_ext" ${build_opts} --rpath "@loader_path/../../../"
         "install"  "--prefix" "${CURRENT_PACKAGES_DIR}" 
         LOGNAME "python-build-${TARGET_TRIPLET}"
         WORKING_DIRECTORY "${SOURCE_PATH}/python"
