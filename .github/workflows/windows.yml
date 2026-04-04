@@ -61,7 +61,7 @@ jobs:
           VCPKG_OPTIONS="--overlay-ports=${{ github.workspace }}/ports --triplet=${{ matrix.triplet }} --x-buildtrees-root=C:/vcpkg-build"
           ./vcpkg/vcpkg.exe install \
           $VCPKG_OPTIONS \
-          'arrow[python]'
+          'arrow[acero,compute,core,csv,dataset,example,filesystem,flight,flightsql,gcs,json,mimalloc,orc,parquet,s3,python]'
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3

@@ -13,7 +13,6 @@ vcpkg_extract_source_archive(
         0004-android-datetime.patch
         0005-cmake-msvcruntime.patch
         0007-use-vcpkg-mimalloc.patch
-        python-fix-cli-params.patch
 )
 
 # Check cpp/cmake_modules/DefineOptions.cmake for option dependencies -
@@ -155,6 +154,12 @@ endif()
 if("python" IN_LIST FEATURES)
     # use the vcpkg-installed python so we create the wheel for the correct version
     message(STATUS "Building pyarrow")
+
+    # only build release config for python
+    set(VCPKG_POLICY_MISMATCHED_NUMBER_OF_BINARIES enabled)
+
+    # pyarrow puts dlls in site-packages, which is where they should be
+    set(VCPKG_POLICY_ALLOW_DLLS_IN_LIB enabled)
     
     if (VCPKG_TARGET_IS_WINDOWS)
         set(PYTHON3 "${CURRENT_HOST_INSTALLED_DIR}/tools/python3/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
@@ -202,7 +207,7 @@ if("python" IN_LIST FEATURES)
 
     vcpkg_execute_required_process(
         COMMAND "${PYTHON3_VENV}" "setup.py"  
-        "build_ext" ${build_opts} --rpath "@loader_path/../../../"
+        "build_ext" ${build_opts} "--cmake-generator" "Ninja" "--rpath" "@loader_path/../../../"
         "install"  "--prefix" "${CURRENT_PACKAGES_DIR}" 
         LOGNAME "python-build-${TARGET_TRIPLET}"
         WORKING_DIRECTORY "${SOURCE_PATH}/python"
