@@ -80,9 +80,15 @@ foreach(binary IN LISTS sip_binaries)
             "#!/usr/bin/env python" IGNORE_UNCHANGED)
 endforeach()
 
+if(VCPKG_TARGET_IS_WINDOWS)
+    set(PYTHON3 "${PYTHON3_BUILD_VENV}/Scripts/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
+else()
+    set(PYTHON3 "${PYTHON3_BUILD_VENV}/bin/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
+endif()
+
 message(STATUS "Running sipbuild...")
 vcpkg_execute_required_process(
-    COMMAND "${PYTHON3_BUILD_VENV}/bin/python" "-m" "sipbuild.tools.build" ${SIPBUILD_ARGS}
+    COMMAND ${PYTHON3} "-m" "sipbuild.tools.build" ${SIPBUILD_ARGS}
     WORKING_DIRECTORY "${SOURCE_PATH}/Python"
     LOGNAME "sipbuild-${TARGET_TRIPLET}"
 )
