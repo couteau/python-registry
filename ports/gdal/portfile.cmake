@@ -89,8 +89,10 @@ string(REPLACE "dynamic" "" qhull_target "Qhull::qhull${VCPKG_LIBRARY_LINKAGE}_r
 
 if(VCPKG_TARGET_IS_WINDOWS)
     set(GDAL_PYTHON_INSTALL_PREFIX "${CURRENT_PACKAGES_DIR}/${PYTHON3_SITE}/../../")
+    set(PYTHON3 "${PYTHON3_BUILD_VENV}/Scripts/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
 else()
     set(GDAL_PYTHON_INSTALL_PREFIX "${CURRENT_PACKAGES_DIR}/${PYTHON3_SITE}/../../../")
+    set(PYTHON3 "${PYTHON3_BUILD_VENV}/bin/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
 endif()
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
@@ -117,7 +119,7 @@ vcpkg_cmake_configure(
         "-DQHULL_LIBRARY=${qhull_target}"
         "-DGDAL_PYTHON_INSTALL_PREFIX=${GDAL_PYTHON_INSTALL_PREFIX}"
         "-DCMAKE_PROJECT_INCLUDE=${CMAKE_CURRENT_LIST_DIR}/cmake-project-include.cmake"
-        "-DPython_EXECUTABLE=${PYTHON3_BUILD_VENV}/bin/python"
+        "-DPython_EXECUTABLE=${PYTHON3}"
     OPTIONS_DEBUG
         -DBUILD_PYTHON_BINDINGS=OFF
         -DBUILD_APPS=OFF
