@@ -1,7 +1,11 @@
 set(ENV{SETUPTOOLS_SCM_PRETEND_VERSION} "${VERSION}")
 set(ENV{PDM_BUILD_SCM_VERSION} "${VERSION}")
 
-set(z_vcpkg_python_func_python "${PYTHON3_BUILD_VENV}/bin/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
+if (VCPKG_TARGET_IS_WINDOWS)
+  set(z_vcpkg_python_func_python "${PYTHON3_BUILD_VENV}/Scripts/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
+else()
+  set(z_vcpkg_python_func_python "${PYTHON3_BUILD_VENV}/bin/python${VCPKG_HOST_EXECUTABLE_SUFFIX}")
+endif()
 
 function(vcpkg_install_python_build_dependency)
   cmake_parse_arguments(
